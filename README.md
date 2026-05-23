@@ -1,16 +1,14 @@
-# Aptamer–protein binding dataset (project template)
+# EGFR kinase inhibitors
 
-Publication-ready **dataset project template** for the course *Extraction and preparation of chemical information*. Students move from a research topic to a structured, validated dataset with documented sources, extraction steps, cleaning pipeline, reports, and citation metadata.
-
-**Example topic:** Aptamer–protein binding dataset (replace with your own project in `project.json`).
+Publication-ready **dataset project template** for the course *Extraction and preparation of chemical information*.
 
 ## Scientific task
 
-Collect experimentally reported aptamer–protein binding measurements (sequences, targets, affinity values, assay context) so they can be compared across literature and database sources.
+Collect experimentally reported EGFR kinase inhibitor measurements (molecules, targets, inhibitor activity values, assay context) so they can be compared across literature and database sources.
 
 ## What is one record?
 
-One **record** = one experimentally reported aptamer–protein binding measurement from a specific source (one row in `data/processed/dataset.csv`). See `project.json` and `reports/practice_01_record_and_schema.md`.
+One **record** = one experimentally reported inhibitor activity measurement from a specific source (one row in `data/processed/dataset.csv`). See `project.json` and `reports/practice_01_record_and_schema.md`.
 
 ## Repository structure
 
