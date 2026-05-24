@@ -1,55 +1,71 @@
 {
   "schema_version": "0.1.0",
-  "dataset_title": "Aptamer–protein binding dataset",
+  "dataset_title": "EGFR kinase inhibitors dataset",
   "fields": [
     {
       "name": "record_id",
       "type": "string",
       "required": true,
       "description": "Stable unique identifier for one binding measurement record.",
-      "example": "rec_apt_thrombin_2018_pdf_001"
+      "example": "rec_mol_egfr_2018_pdf_001"
     },
     {
-      "name": "aptamer_sequence",
+      "name": "compound_id",
       "type": "string",
       "required": true,
-      "description": "Nucleotide sequence of the aptamer (DNA or RNA), 5' to 3'.",
-      "example": "GGTTGGTGTGGTTGG",
-      "normalization_rule": "Uppercase; remove spaces and hyphens; keep only A,C,G,T,U."
+      "description": "Unique identifier for the compound (e.g., MOL_0001 or ChEMBL ID).",
+      "example": "CHEMBL553"
     },
     {
-      "name": "target_name",
-      "type": "string",
-      "required": true,
-      "description": "Name of the protein or biomolecular target.",
-      "example": "Thrombin"
-    },
-    {
-      "name": "target_type",
+      "name": "compound_name",
       "type": "string",
       "required": false,
-      "description": "Broad classification of the target (e.g. enzyme, receptor, toxin).",
-      "example": "serine protease"
+      "description": "Common or generic name of the compound, if available.",
+      "example": "Erlotinib"
     },
     {
-      "name": "measurement_type",
+      "name": "compound_smiles",
       "type": "string",
       "required": true,
-      "description": "Reported affinity or binding metric (Kd, Ki, IC50, etc.).",
-      "example": "Kd"
+      "description": "SMILES string representing the compound structure.",
+      "example": "C#Cc1cccc(Nc2ncnc3cc(OCCOC)c(OCCOC)cc23)c1",
+      "normalization_rule": "Use canonical SMILES, strip all salts, neutralize charges where chemically appropriate; store original in notes if modified."
     },
     {
-      "name": "measurement_value",
+      "name": "egfr_variant",
+      "type": "string",
+      "required": true,
+      "description": "EGFR mutational status (e.g., WT, L858R, T790M, Exon19_del).",
+      "example": "L858R",
+      "normalization_rule": "Convert string to uppercase. Strip any whitespace. Parse mutational codes and sort compound mutations alphabetically using an underscore separator (e.g., sort 'T790M/L858R' to 'L858R_T790M'). Standardize wild-type as 'WT' and use HGVS-like notation for deletions/insertions (e.g., 'delE746_A750')."
+    },
+    {
+      "name": "standard_type",
+      "type": "string",
+      "required": true,
+      "description": "Standard measurement type of an inhibitor activity (e.g. IC50, Ki, Kd).",
+      "example": "IC50"
+    },
+    {
+      "name": "standard_relation",
+      "type": "string",
+      "required": false,
+      "description": "Precision relation for the standard value (e.g., '=', '>', '<', '>=', '<=').",
+      "example": "=",
+      "normalization_rule": "If the relation is reported as '~', 'approx.', 'around', or is missing entirely, default it to '='."
+    },
+    {
+      "name": "standard_value",
       "type": "number",
-      "required": false,
+      "required": true,
       "description": "Numeric value as reported in the source.",
       "example": 0.5
     },
     {
-      "name": "measurement_unit",
+      "name": "standard_units",
       "type": "string",
-      "required": false,
-      "description": "Unit of measurement_value (nM, μM, pM, etc.).",
+      "required": true,
+      "description": "Unit of standard_value (nM, μM, pM, etc.).",
       "example": "nM",
       "normalization_rule": "Map synonyms to nM, μM, pM, M; store original in notes if converted."
     },
@@ -57,30 +73,47 @@
       "name": "normalized_value_nm",
       "type": "number",
       "required": false,
-      "description": "Binding affinity converted to nanomolar (nM) for comparison.",
+      "description": "Measured activity converted to nanomolar (nM) for comparison.",
       "example": 0.5,
-      "normalization_rule": "Convert measurement_value using measurement_unit to nM."
+      "normalization_rule": "Convert standard_value using standard_units to nM."
     },
     {
-      "name": "assay_method",
-      "type": "string",
-      "required": false,
-      "description": "Experimental method used to obtain the measurement.",
-      "example": "surface plasmon resonance"
-    },
-    {
-      "name": "buffer",
-      "type": "string",
-      "required": false,
-      "description": "Buffer composition during the binding assay.",
-      "example": "PBS with 5 mM MgCl2"
-    },
-    {
-      "name": "temperature_c",
+      "name": "pchembl_value",
       "type": "number",
       "required": false,
-      "description": "Assay temperature in degrees Celsius.",
-      "example": 25
+      "description": "Negative log molar concentration (pChEMBL) calculated from normalized_value_nm.",
+      "example": 9.3,
+      "normalization_rule": "Calculate pChEMBL as -log10(normalized_value_nm / 1e9)."
+    },
+    {
+      "name": "assay_type",
+      "type": "string",
+      "required": false,
+      "description": "Experimental assay type: kinase activity/binding or cell proliferation/viability.",
+      "example": "cellular",
+      "normalization_rule": "Convert string to lowercase. Standardize to either 'biochemical' or 'cellular'."
+    },
+    {
+      "name": "cell_line",
+      "type": "string",
+      "required": false,
+      "description": "Specific cell line used for cellular assays.",
+      "example": "H1975",
+      "normalization_rule": "Convert string to uppercase, strip whitespaces and hyphens (e.g., standardizing 'Ba/F3' or 'BaF3' to 'BA/F3')."
+    },
+    {
+      "name": "atp_concentration_uM",
+      "type": "number",
+      "required": false,
+      "description": "ATP concentration in micromolar (uM) used in biochemical assays.",
+      "example": 100
+    },
+    {
+      "name": "covalent_flag",
+      "type": "boolean",
+      "required": false,
+      "description": "True if the inhibitor binds covalently to the target.",
+      "example": true
     },
     {
       "name": "source_id",
@@ -88,27 +121,6 @@
       "required": true,
       "description": "Identifier linking to an entry in specs/source_map.json.",
       "example": "paper_green_2018"
-    },
-    {
-      "name": "source_type",
-      "type": "string",
-      "required": false,
-      "description": "Category of source (paper, database, web page, etc.).",
-      "example": "scientific_paper"
-    },
-    {
-      "name": "source_url",
-      "type": "string",
-      "required": false,
-      "description": "URL or landing page for the source.",
-      "example": "https://doi.org/10.1021/example"
-    },
-    {
-      "name": "doi",
-      "type": "string",
-      "required": false,
-      "description": "Digital Object Identifier when available.",
-      "example": "10.1021/example"
     },
     {
       "name": "extraction_method",
