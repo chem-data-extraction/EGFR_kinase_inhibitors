@@ -1,24 +1,24 @@
-# Dataset card — Aptamer–protein binding dataset
+# Dataset card — EGFR kinase inhibitors dataset
 
 ## Dataset title
 
-Aptamer–protein binding dataset (course template v0.1.0)
+EGFR Kinase inhibitors dataset (v0.1.0)
 
 ## Dataset summary
 
-Tabular collection of experimentally reported aptamer–protein binding measurements, including sequences, targets, affinity values, assay metadata, and provenance fields. This repository is a **template** with illustrative example rows.
+Tabular collection of experimentally reported small-molecule EGFR kinase inhibitor measurements, capturing exact target mutational status (wild-type and clinically relevant mutants), quantitative bioactivity metrics (IC50, Ki, Kd), assay context, and provenance.
 
 ## Scientific task
 
-Support comparison of reported binding affinities (e.g. Kd) and assay conditions across literature and curated database sources for aptamer–protein pairs.
+Support the comparison of inhibitor potencies and selectivities across different EGFR variants. This dataset serves as a benchmark for training machine learning models to predict variant-specific drug efficacy and design-out resistance.
 
 ## Record unit
 
-One row = one experimentally reported binding measurement for one aptamer–target pair from one source.
+One row = one experimentally reported bioactivity measurement for a unique small molecule tested against a specific human EGFR variant (wild-type or designated mutant) in a defined assay.
 
 ## Data sources
 
-Defined in `specs/source_map.json`: journal PDFs, supplementary tables, aptamer databases, metadata aggregators, GitHub releases, and optional ML dataset exports (with license review).
+Defined in `specs/source_map.json`: journal PDFs, supplementary tables, molecule databases, metadata aggregators, GitHub releases, and optional ML dataset exports (with license review).
 
 ## Data extraction procedure
 
@@ -28,7 +28,7 @@ Defined in `specs/source_map.json`: journal PDFs, supplementary tables, aptamer 
 
 ## Data cleaning and normalization
 
-`scripts/build_dataset.py` merges extracts; `scripts/clean_dataset.py` normalizes sequences, units (to nM), missing values, and deduplicates per `specs/cleaning_pipeline.json`.
+`scripts/build_dataset.py` merges extracts; `scripts/clean_dataset.py` normalizes chemical structure representations, converts activity values to standard nanomolar units (to nM), calculates negative log values, handles missing values, deduplicates entries per `specs/cleaning_pipeline.json`.
 
 ## Dataset schema
 
@@ -36,7 +36,7 @@ Field definitions, types, and examples: `specs/dataset_schema.json`. Final colum
 
 ## Validation
 
-Rules in `specs/validation_rules.json`; checks via `scripts/validate_project.py` and `tests/test_required_artifacts.py`.
+Rules cpecified in `specs/validation_rules.json`; checks via `scripts/validate_project.py` and `tests/test_required_artifacts.py`.
 
 ## Known limitations
 
@@ -46,7 +46,7 @@ Rules in `specs/validation_rules.json`; checks via `scripts/validate_project.py`
 
 ## Recommended use
 
-Teaching structured scientific data extraction; prototyping pipelines; benchmarking parsing workflows on aptamer binding tables.
+Training regression or classification models to predict compound activity against wild-type or mutated EGFR; exploring kinase-selectivity profiles; benchmarking chemical parsing pipelines.
 
 ## Not recommended use
 
@@ -54,8 +54,8 @@ Clinical decision-making; uncritical meta-analysis without re-verifying primary 
 
 ## License
 
-See `LICENSE` — replace placeholder before publication (e.g. CC-BY-4.0 or CC0-1.0 subject to upstream data licenses).
+See `LICENSE` — CC-BY-4.0.
 
 ## Citation
 
-See `CITATION.cff`. Update authors, version, and repository URL before release.
+See `CITATION.cff`.

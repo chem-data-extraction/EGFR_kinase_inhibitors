@@ -1,18 +1,18 @@
 cff-version: 1.2.0
-title: "Aptamer–protein binding dataset"
+title: "EGFR kinase inhibitors dataset"
 message: "If you use this dataset, please cite it as below."
 type: dataset
 authors:
-  - family-names: "Student"
-    given-names: "Name"
-    affiliation: "University / Course"
-repository-code: "https://github.com/example/aptamer-protein-binding-dataset"
-url: "https://github.com/example/aptamer-protein-binding-dataset"
+  - family-names: "Litvinova"
+    given-names: "Viktoria"
+    affiliation: "ITMO University"
+repository-code: "https://github.com/chem-data-extraction/EGFR_kinase_inhibitors"
+url: "https://github.com/chem-data-extraction/EGFR_kinase_inhibitors"
 version: 0.1.0
-date-released: 2026-05-22
+date-released: 2026-05-23
 keywords:
-  - aptamer
-  - protein binding
-  - affinity
+  - molecule
+  - target protein
+  - inhibitor measurement
   - scientific data extraction
 license: CC-BY-4.0

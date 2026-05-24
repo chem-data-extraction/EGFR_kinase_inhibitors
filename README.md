@@ -1,14 +1,14 @@
 # EGFR kinase inhibitors
 
-Publication-ready **dataset project template** for the course *Extraction and preparation of chemical information*.
+Publication-ready **dataset** for the course *Extraction and preparation of chemical information*.
 
 ## Scientific task
 
-Collect experimentally reported EGFR kinase inhibitor measurements (molecules, targets, inhibitor activity values, assay context) so they can be compared across literature and database sources.
+Collect and standardize experimentally reported bioactivity measurements of small-molecule inhibitors tested against wild-type and mutant human EGFR variants from literature and database sources to build a robust benchmark for variant-specific activity prediction.
 
 ## What is one record?
 
-One **record** = one experimentally reported inhibitor activity measurement from a specific source (one row in `data/processed/dataset.csv`). See `project.json` and `reports/practice_01_record_and_schema.md`.
+One **record** = one quantitative experimental measurement (IC50, Ki, Kd) for a unique small-molecule structure against a specific human EGFR mutational variant in a defined assay (one row in `data/processed/dataset.csv`). See `project.json` and `reports/practice_01_record_and_schema.md`.
 
 ## Repository structure
 

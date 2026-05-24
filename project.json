@@ -1,14 +1,14 @@
 {
-  "project_id": "EGFR_kinase_inhibitors",
+  "project_id": "egfr_kinase_inhibitors",
   "project_title": "EGFR kinase inhibitors dataset",
-  "project_status": "template",
-  "scientific_task": "Collect experimentally reported EGFR kinase inhibitor measurements for downstream comparison of inhibitory activity values and assay conditions.",
+  "project_status": "in_progress",
+  "scientific_task": "Collect experimentally reported EGFR kinase inhibitor measurements against wild-type and mutant human EGFR variants to compare inhibitor potencies and build predictive benchmarks.",
   "record_definition": {
-    "one_record": "One experimentally reported EGFR kinase inhibitor measurement from a specific source."
+    "one_record": "One experimentally reported bioactivity measurement (IC50, Ki, Kd) of a specific small molecule tested against a specific human EGFR variant (wild-type or mutant) from a single literature or database source."
   },
   "main_entities": [
     "molecule",
-    "protein_target",
+    "target_protein_variant",
     "inhibitor_measurement",
     "source"
   ],
@@ -16,6 +16,6 @@
   "schema_path": "specs/dataset_schema.json",
   "source_map_path": "specs/source_map.json",
   "created_by": "Litvinova Viktoria",
-  "created_date": "",
+  "created_date": "2026-05-23",
   "version": "0.1.0"
 }
