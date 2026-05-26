@@ -1,170 +1,147 @@
 {
-  "topic": "Aptamer–protein binding measurements",
-  "root_query": "aptamer protein binding Kd SPR SELEX experimental affinity",
+  "topic": "EGFR kinase inhibitor measurements",
+  "root_query": "EGFR kinase WT mutant IC50 Ki Kd experimental inhibitor activity",
   "source_map_version": "0.1.0",
   "source_groups": {
     "scientific_papers": [
       {
-        "source_id": "paper_green_2018",
-        "name": "Green et al. 2018 – thrombin-binding DNA aptamer",
+        "source_id": "paper_moyer_1997",
+        "name": "Moyer et al. 1997 – Erlotinib (CP-358,774) TKI activity against EGFR",
         "source_type": "journal_article",
-        "url": "https://doi.org/10.1021/example.2018",
-        "doi": "10.1021/example.2018",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9354447/",
+        "doi": "9354447",
         "access_status": "open_access",
         "access_method": "publisher PDF download",
-        "access_date": "2026-01-15",
-        "license": "CC-BY-4.0",
+        "access_date": "2026-05-24",
+        "license": "publisher terms (for research purpose)",
         "expected_data_volume": "low",
-        "estimated_records": 8,
-        "available_data_types": ["tables", "text", "figures"],
-        "expected_fields": ["aptamer_sequence", "target_name", "Kd", "assay_method"],
+        "estimated_records": 5,
+        "available_data_types": ["text", "figures"],
+        "expected_fields": ["compound_name", "standard_type", "standard_value", "standard_units", "assay_type"],
         "extraction_strategy": {
-          "recommended_method": "pdf_table_extraction plus manual verification"
+          "recommended_method": "OCR, regex parsing of text and manual plot analysis"
         },
-        "notes": "Primary paper for thrombin aptamer benchmark measurements."
+        "notes": "Historical benchmark for Erlotinib (CP-358,774) against EGFR WT. Data is embedded within body text and dose-response figures."
       },
       {
-        "source_id": "paper_lee_2020",
-        "name": "Lee et al. 2020 – multiplex aptamer panel",
+        "source_id": "paper_lim_2023",
+        "name": "Lim et al. 2023 – BBT-176 4th-generation TKI for EGFR mutations",
         "source_type": "journal_article",
-        "url": "https://doi.org/10.1038/example.2020",
-        "doi": "10.1038/example.2020",
-        "access_status": "subscription",
-        "access_method": "institutional library PDF",
-        "access_date": "2026-01-20",
-        "license": "publisher terms",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37249619/",
+        "doi": "10.1158/1078-0432.CCR-22-3901",
+        "access_status": "open_access",
+        "access_method": "publisher PDF download",
+        "access_date": "2026-05-24",
+        "license": "CC BY-NC-ND 4.0",
         "expected_data_volume": "medium",
-        "estimated_records": 25,
-        "available_data_types": ["supplementary_tables"],
-        "expected_fields": ["aptamer_sequence", "target_name", "IC50", "buffer"],
+        "estimated_records": 40,
+        "available_data_types": ["tables", "figures", "text"],
+        "expected_fields": ["compound_name", "egfr_variant", "standard_type", "standard_value", "standard_units", "assay_type", "atp_concentration_uM"],
         "extraction_strategy": {
-          "recommended_method": "supplementary PDF table parsing"
+          "recommended_method": "image table extraction for figures, regex parsing for text"
         },
-        "notes": "Use supplementary Table S3 for binding constants."
+        "notes": "EGFR inhibitor targeting the C797S resistance mutation. Structured tables in main PDF text."
       },
       {
-        "source_id": "paper_kim_2015",
-        "name": "Kim et al. 2015 – lysozyme-binding aptamer",
+        "source_id": "paper_schwartz_2014",
+        "name": "Schwartz et al. 2014 – Covalent EGFR inhibitor analysis",
         "source_type": "journal_article",
-        "url": "https://doi.org/10.1016/example.2015",
-        "doi": "10.1016/example.2015",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3890870/",
+        "doi": "10.1073/pnas.1313733111",
         "access_status": "open_access",
         "access_method": "publisher PDF download",
-        "access_date": "2026-01-18",
-        "license": "CC-BY-NC-ND",
-        "expected_data_volume": "low",
-        "estimated_records": 6,
+        "access_date": "2026-05-24",
+        "license": "PNAS open access option",
+        "expected_data_volume": "medium",
+        "estimated_records": 15,
         "available_data_types": ["tables", "text"],
-        "expected_fields": ["aptamer_sequence", "target_name", "Kd", "assay_method"],
+        "expected_fields": ["compound_name", "egfr_variant", "standard_type", "standard_value", "standard_units", "assay_type"],
         "extraction_strategy": {
-          "recommended_method": "pdfplumber table extraction"
+          "recommended_method": "regex parsing of text and pdfplumber table extraction"
         },
-        "notes": "Benchmark lysozyme aptamer measurements."
+        "notes": "Key Pfizer study profiling the double mutant EGFR-L858R/T790M and WT with covalent inhibitors. Contains structured potency values in the main text and tables."
       }
     ],
     "supplementary_materials": [
       {
-        "source_id": "supp_lee_2020_s3",
-        "name": "Lee 2020 Supplementary Table S3",
+        "source_id": "supp_schwartz_2014",
+        "name": "Schwartz et al. 2014 Supplementary Information",
         "source_type": "supplementary_data",
-        "url": "https://doi.org/10.1038/example.2020#supplementary",
-        "doi": "10.1038/example.2020",
+        "url": "https://www.pnas.org/doi/suppl/10.1073/pnas.1313733111",
+        "doi": "10.1073/pnas.1313733111",
         "access_status": "open_access",
-        "access_method": "supplementary PDF",
-        "access_date": "2026-01-21",
-        "license": "CC-BY-4.0",
+        "access_method": "supplementary PDF download",
+        "access_date": "2026-05-25",
+        "license": "PNAS open access option",
         "expected_data_volume": "medium",
         "estimated_records": 20,
-        "available_data_types": ["tables"],
-        "expected_fields": ["aptamer_sequence", "measurement_value", "measurement_unit"],
+        "available_data_types": ["tables", "figures"],
+        "expected_fields": ["compound_name", "egfr_variant", "standard_type", "standard_value", "standard_units"],
         "extraction_strategy": {
-          "recommended_method": "Camelot or tabula on supplementary PDF"
+          "recommended_method": "Camelot or tabula supplementary table parsing"
         },
-        "notes": "Machine-readable tables; preferred over main-text figure values."
+        "notes": "Contains extensive supplemental tables comparing Kd, Ki, and kinetic constants (kinact) of covalent inhibitors and analogs against WT and L858R/T790M EGFR."
       }
     ],
     "databases": [
       {
-        "source_id": "db_aptagen",
-        "name": "AptaIndex / literature-curated aptamer entries",
+        "source_id": "db_chembl_api",
+        "name": "ChEMBL Database REST API",
         "source_type": "database",
-        "url": "https://example.org/aptamer-db",
+        "url": "https://www.ebi.ac.uk/chembl/",
         "doi": "",
         "access_status": "open_access",
-        "access_method": "web export and API (if available)",
-        "access_date": "2026-02-01",
-        "license": "CC-BY-4.0",
+        "access_method": "Python requests API querying",
+        "access_date": "2026-05-24",
+        "license": "CC BY-SA 3.0",
         "expected_data_volume": "high",
-        "estimated_records": 200,
-        "available_data_types": ["structured_records", "sequences"],
-        "expected_fields": ["aptamer_sequence", "target_name", "Kd"],
+        "estimated_records": 5000,
+        "available_data_types": ["structured_records"],
+        "expected_fields": ["compound_id", "compound_smiles", "egfr_variant", "standard_type", "standard_value", "standard_units"],
         "extraction_strategy": {
-          "recommended_method": "web_scrape or bulk CSV download"
+          "recommended_method": "Python script with requests to query target_chembl_id=CHEMBL203"
         },
-        "notes": "Cross-check sequences against primary papers when possible."
+        "notes": "Primary database for automated extraction. Covers wild-type and common mutants, though metadata parsing of mutations is required."
+      },
+      {
+        "source_id": "db_pubchem_api",
+        "name": "PubChem PUG REST API",
+        "source_type": "database",
+        "url": "https://pubchem.ncbi.nlm.nih.gov/",
+        "doi": "",
+        "access_status": "open_access",
+        "access_method": "programmatic JSON API querying",
+        "access_date": "2026-05-24",
+        "license": "Public Domain",
+        "expected_data_volume": "high",
+        "estimated_records": 1000,
+        "available_data_types": ["structured_records"],
+        "expected_fields": ["compound_id", "compound_smiles", "egfr_variant", "standard_type", "standard_value", "standard_units"],
+        "extraction_strategy": {
+          "recommended_method": "API lookup by assay ID or target text matching"
+        },
+        "notes": "Provides supplementary screening data. High volume of records but metadata is less detailed than ChEMBL."
       }
     ],
     "aggregators": [
       {
-        "source_id": "agg_uniprot_crossref",
-        "name": "UniProt + Crossref metadata for target proteins",
+        "source_id": "agg_bindingdb",
+        "name": "BindingDB Target Page",
         "source_type": "aggregator",
-        "url": "https://www.uniprot.org/",
+        "url": "https://www.bindingdb.org/rwd/bind/index.jsp",
         "doi": "",
         "access_status": "open_access",
-        "access_method": "REST API",
-        "access_date": "2026-02-05",
-        "license": "CC-BY-4.0",
-        "expected_data_volume": "metadata_only",
-        "estimated_records": 0,
-        "available_data_types": ["protein_names", "identifiers"],
-        "expected_fields": ["target_name", "target_type"],
-        "extraction_strategy": {
-          "recommended_method": "API lookup to standardize target names"
-        },
-        "notes": "Does not provide binding values; enriches target metadata only."
-      }
-    ],
-    "github_repositories": [
-      {
-        "source_id": "gh_aptamer_benchmark",
-        "name": "community/aptamer-binding-benchmark",
-        "source_type": "github_repository",
-        "url": "https://github.com/example/aptamer-binding-benchmark",
-        "doi": "",
-        "access_status": "open_access",
-        "access_method": "git clone",
-        "access_date": "2026-02-10",
-        "license": "MIT",
-        "expected_data_volume": "medium",
-        "estimated_records": 50,
-        "available_data_types": ["csv", "json"],
-        "expected_fields": ["aptamer_sequence", "target_name", "measurement_value"],
-        "extraction_strategy": {
-          "recommended_method": "import released CSV with license check"
-        },
-        "notes": "Verify commit hash and release tag for reproducibility."
-      }
-    ],
-    "ml_datasets": [
-      {
-        "source_id": "ml_aptamer_kaggle",
-        "name": "Kaggle – Aptamer affinity prediction subset",
-        "source_type": "ml_dataset",
-        "url": "https://www.kaggle.com/datasets/example/aptamer-affinity",
-        "doi": "",
-        "access_status": "registration_required",
-        "access_method": "Kaggle API download",
-        "access_date": "2026-02-12",
-        "license": "unknown",
+        "access_method": "HTML parsing and TSV bulk download",
+        "access_date": "2026-05-24",
+        "license": "CC BY-SA 3.0",
         "expected_data_volume": "high",
-        "estimated_records": 500,
-        "available_data_types": ["csv"],
-        "expected_fields": ["aptamer_sequence", "target_name", "label"],
+        "estimated_records": 1500,
+        "available_data_types": ["tables", "structured_records"],
+        "expected_fields": ["compound_id", "compound_smiles", "egfr_variant", "standard_type", "standard_value", "standard_units"],
         "extraction_strategy": {
-          "recommended_method": "document provenance; use only if license permits redistribution"
+          "recommended_method": "web scrape of target HTML or pandas parsing of flat TSV"
         },
-        "notes": "May mix predicted and experimental values—filter by source column."
+        "notes": "Good for thermodynamic parameters (Kd, Ki) of EGFR inhibitors."
       }
     ]
   }
