@@ -5,25 +5,6 @@
   "source_groups": {
     "scientific_papers": [
       {
-        "source_id": "paper_moyer_1997",
-        "name": "Moyer et al. 1997 – Erlotinib (CP-358,774) TKI activity against EGFR",
-        "source_type": "journal_article",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/9354447/",
-        "doi": "9354447",
-        "access_status": "open_access",
-        "access_method": "publisher PDF download",
-        "access_date": "2026-05-24",
-        "license": "publisher terms (for research purpose)",
-        "expected_data_volume": "low",
-        "estimated_records": 5,
-        "available_data_types": ["text", "figures"],
-        "expected_fields": ["compound_name", "standard_type", "standard_value", "standard_units", "assay_type"],
-        "extraction_strategy": {
-          "recommended_method": "OCR, regex parsing of text and manual plot analysis"
-        },
-        "notes": "Historical benchmark for Erlotinib (CP-358,774) against EGFR WT. Data is embedded within body text and dose-response figures."
-      },
-      {
         "source_id": "paper_lim_2023",
         "name": "Lim et al. 2023 – BBT-176 4th-generation TKI for EGFR mutations",
         "source_type": "journal_article",
@@ -36,51 +17,89 @@
         "expected_data_volume": "medium",
         "estimated_records": 40,
         "available_data_types": ["tables", "figures", "text"],
-        "expected_fields": ["compound_name", "egfr_variant", "standard_type", "standard_value", "standard_units", "assay_type", "atp_concentration_uM"],
+        "expected_fields": ["compound_name", "egfr_variant", "pdb_id", "standard_type", "standard_value", "standard_units", "assay_type", "atp_concentration_uM"],
         "extraction_strategy": {
           "recommended_method": "image table extraction for figures, regex parsing for text"
         },
         "notes": "EGFR inhibitor targeting the C797S resistance mutation. Structured tables in main PDF text."
       },
       {
-        "source_id": "paper_schwartz_2014",
-        "name": "Schwartz et al. 2014 – Covalent EGFR inhibitor analysis",
+        "source_id": "paper_men_2025",
+        "name": "Men et al. 2025 – Novel amino acid-Osimertinib conjugates as potential EGFR inhibitors",
         "source_type": "journal_article",
-        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3890870/",
-        "doi": "10.1073/pnas.1313733111",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41218416/",
+        "doi": "10.1016/j.bmc.2025.118482",
         "access_status": "open_access",
         "access_method": "publisher PDF download",
-        "access_date": "2026-05-24",
-        "license": "PNAS open access option",
+        "access_date": "2026-05-26",
+        "license": "Elsevier publisher terms (free to read)",
         "expected_data_volume": "medium",
-        "estimated_records": 15,
+        "estimated_records": 25,
         "available_data_types": ["tables", "text"],
-        "expected_fields": ["compound_name", "egfr_variant", "standard_type", "standard_value", "standard_units", "assay_type"],
+        "expected_fields": ["compound_name", "egfr_variant", "pdb_id", "standard_type", "standard_value", "standard_units", "assay_type"],
         "extraction_strategy": {
           "recommended_method": "regex parsing of text and pdfplumber table extraction"
         },
-        "notes": "Key Pfizer study profiling the double mutant EGFR-L858R/T790M and WT with covalent inhibitors. Contains structured potency values in the main text and tables."
+        "notes": "Extremely recent 2025 study on osimertinib derivatives targeting T790M/L858R. Not yet fully curated in standard ChEMBL releases."
+      },
+      {
+        "source_id": "paper_damghani_2026",
+        "name": "Damghani et al. 2026 – Structural Studies of Fourth-Generation EGFR Inhibitors",
+        "source_type": "journal_article",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12893389/",
+        "doi": "10.1021/acsmedchemlett.5c00725",
+        "access_status": "open_access",
+        "access_method": "publisher PDF download",
+        "access_date": "2026-05-26",
+        "license": "CC PDM 1.0",
+        "expected_data_volume": "low",
+        "estimated_records": 10,
+        "available_data_types": ["tables", "text"],
+        "expected_fields": ["compound_name", "egfr_variant", "pdb_id", "standard_type", "standard_value", "standard_units", "assay_type"],
+        "extraction_strategy": {
+          "recommended_method": "Tabula or pdfplumber table extraction"
+        },
+        "notes": "Ultra-recent 2026 paper analyzing BI-8128 and BI-4732 binding modes to T790M/C797S mutant with resolved PDB structures."
+      },
+      {
+        "source_id": "paper_srour_2025",
+        "name": "Srour et al. 2025 – New benzimidazole-triazole glycoconjugates as anti-cancer agents and EGFR inhibitors",
+        "source_type": "journal_article",
+        "url": "https://www.nature.com/articles/s41598-025-96675-3",
+        "doi": "10.1038/s41598-025-96675-3",
+        "access_status": "open_access",
+        "access_method": "publisher PDF download",
+        "access_date": "2026-05-26",
+        "license": "CC BY-NC-ND 4.0",
+        "expected_data_volume": "medium",
+        "estimated_records": 78,
+        "available_data_types": ["tables", "figures", "text"],
+        "expected_fields": ["compound_name", "egfr_variant", "pdb_id", "standard_type", "standard_value", "standard_units", "assay_type"],
+        "extraction_strategy": {
+          "recommended_method": "regex parsing of text and pdfplumber table extraction"
+        },
+        "notes": "Extremely recent 2025 study on osimertinib derivatives targeting WT EGFR and 4 its mutant forms. Not yet fully curated in standard ChEMBL releases."
       }
     ],
     "supplementary_materials": [
       {
-        "source_id": "supp_schwartz_2014",
-        "name": "Schwartz et al. 2014 Supplementary Information",
+        "source_id": "supp_men_2025",
+        "name": "Men et al. 2025 Supplementary Information",
         "source_type": "supplementary_data",
-        "url": "https://www.pnas.org/doi/suppl/10.1073/pnas.1313733111",
-        "doi": "10.1073/pnas.1313733111",
+        "url": "https://doi.org/10.1016/j.bmc.2025.118482",
+        "doi": "10.1016/j.bmc.2025.118482",
         "access_status": "open_access",
         "access_method": "supplementary PDF download",
-        "access_date": "2026-05-25",
-        "license": "PNAS open access option",
-        "expected_data_volume": "medium",
-        "estimated_records": 20,
+        "access_date": "2026-05-26",
+        "license": "Elsevier publisher terms (free to read)",
+        "expected_data_volume": "low",
+        "estimated_records": 10,
         "available_data_types": ["tables", "figures"],
-        "expected_fields": ["compound_name", "egfr_variant", "standard_type", "standard_value", "standard_units"],
+        "expected_fields": ["compound_name", "egfr_variant", "pdb_id", "standard_type", "standard_value", "standard_units"],
         "extraction_strategy": {
-          "recommended_method": "Camelot or tabula supplementary table parsing"
+          "recommended_method": "Tabula supplementary table parsing"
         },
-        "notes": "Contains extensive supplemental tables comparing Kd, Ki, and kinetic constants (kinact) of covalent inhibitors and analogs against WT and L858R/T790M EGFR."
+        "notes": "Contains thermodynamic integration and detailed IC50 values for allosteric fourth-generation inhibitors."
       }
     ],
     "databases": [
@@ -121,11 +140,9 @@
           "recommended_method": "API lookup by assay ID or target text matching"
         },
         "notes": "Provides supplementary screening data. High volume of records but metadata is less detailed than ChEMBL."
-      }
-    ],
-    "aggregators": [
+      },
       {
-        "source_id": "agg_bindingdb",
+        "source_id": "db_bindingdb",
         "name": "BindingDB Target Page",
         "source_type": "aggregator",
         "url": "https://www.bindingdb.org/rwd/bind/index.jsp",
@@ -142,6 +159,27 @@
           "recommended_method": "web scrape of target HTML or pandas parsing of flat TSV"
         },
         "notes": "Good for thermodynamic parameters (Kd, Ki) of EGFR inhibitors."
+      }
+    ],
+    "github_repositories": [
+      {
+        "source_id": "gn_gnn_zenodo",
+        "name": "Zenodo EGFR GNN Dataset",
+        "source_type": "ml_dataset",
+        "url": "https://zenodo.org/records/11122146",
+        "doi": "10.5281/zenodo.11122146",
+        "access_status": "open_access",
+        "access_method": "direct zip download",
+        "access_date": "2026-05-26",
+        "license": "CC BY 4.",
+        "expected_data_volume": "high",
+        "estimated_records": 18000,
+        "available_data_types": ["structured_records"],
+        "expected_fields": ["compound_id", "compound_smiles", "egfr_variant", "standard_type", "standard_value", "standard_units"],
+        "extraction_strategy": {
+          "recommended_method": "Direct pandas CSV loading and filtering"
+        },
+        "notes": "External validation dataset containing 18,282 records annotated across 11 EGFR mutations. Mapped strictly as an independent benchmark comparison and model validator rather than a training core."
       }
     ]
   }
