@@ -40,6 +40,13 @@
       "normalization_rule": "Convert string to uppercase. Strip any whitespace. Parse mutational codes and sort compound mutations alphabetically using an underscore separator (e.g., sort 'T790M/L858R' to 'L858R_T790M'). Standardize wild-type as 'WT' and use HGVS-like notation for deletions/insertions (e.g., 'delE746_A750')."
     },
     {
+      "name": "pdb_id",
+      "type": "string",
+      "required": false,
+      "description": "Corresponding Protein Data Bank (PDB) structure ID, if experimentally resolved in co-crystallization.",
+      "example": "4HJO"
+    },
+    {
       "name": "standard_type",
       "type": "string",
       "required": true,

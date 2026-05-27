@@ -44,16 +44,17 @@ The dataset schema consists of both required fields (necessary for a valid entry
 
 ### Optional Fields
 9. `compound_name` (string): Generic or common name (e.g., `Erlotinib`, `Gefitinib`).
-10. `standard_relation` (string): Precision relation operator; must be one of `["=", "<", ">", "<=", ">="]`.
-11. `normalized_value_nm` (numeric): Measured activity converted to nanomolar (nM).
-12. `pchembl_value` (numeric): Standardized negative log10 of the molar activity value.
-13. `assay_type` (string): Context of the assay; must be one of `["Biochemical", "Cellular"]`.
-14. `cell_line` (string): Cell line name used for cellular assays (e.g., `Ba/F3`, `H1975`, `PC-9`).
-15. `atp_concentration_uM` (numeric): ATP concentration in micromolar (uM) used in biochemical assays.
-16. `covalent_flag` (boolean): Flag indicating if the compound is designed to covalently bind to C797 or other residues.
-17. `extraction_method` (string): How the record was obtained (pdf_manual, pdf_table, web_scrape, etc.).
-18. `extraction_confidence` (string): Confidence in extracted values: high, medium, low, or unknown.
-19. `notes` (string): Free-text notes, caveats, or provenance details.
+10. `pdb_id` (string): Corresponding Protein Data Bank (PDB) ID if the co-crystal structure is resolved.
+11. `standard_relation` (string): Precision relation operator; must be one of `["=", "<", ">", "<=", ">="]`.
+12. `normalized_value_nm` (numeric): Measured activity converted to nanomolar (nM).
+13. `pchembl_value` (numeric): Standardized negative log10 of the molar activity value.
+14. `assay_type` (string): Context of the assay; must be one of `["Biochemical", "Cellular"]`.
+15. `cell_line` (string): Cell line name used for cellular assays (e.g., `Ba/F3`, `H1975`, `PC-9`).
+16. `atp_concentration_uM` (numeric): ATP concentration in micromolar (uM) used in biochemical assays.
+17. `covalent_flag` (boolean): Flag indicating if the compound is designed to covalently bind to C797 or other residues.
+18. `extraction_method` (string): How the record was obtained (pdf_manual, pdf_table, web_scrape, etc.).
+19. `extraction_confidence` (string): Confidence in extracted values: high, medium, low, or unknown.
+20. `notes` (string): Free-text notes, caveats, or provenance details.
 
 ## Ambiguous cases
 
