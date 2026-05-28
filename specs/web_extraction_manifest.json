@@ -4,51 +4,99 @@
   "script": "scripts/extract_web.py",
   "input_pages": [
     {
-      "source_id": "db_aptagen",
-      "page_id": "aptagen_thrombin_entries",
-      "url": "https://example.org/aptamer-db/target/thrombin",
-      "access_date": "2026-02-01",
+      "source_id": "db_chembl_api",
+      "page_id": "chembl_egfr_activities",
+      "url": "https://www.ebi.ac.uk/chembl/api/data/activity?target_chembl_id=CHEMBL203&standard_type=IC50&_format=json&limit=1000",
+      "access_date": "2026-05-28",
       "access_status": "open_access",
-      "robots_notes": "robots.txt allows crawling of /aptamer-db/ with 1 req/s; respect terms of use.",
-      "selection_reason": "Structured HTML tables listing curated thrombin aptamer Kd values.",
-      "page_type": "database_browse_page",
-      "expected_content": "HTML table with columns: sequence, target, Kd, method",
+      "robots_notes": "ChEMBL API permits programmatic retrieval of open bioactivity data without strict rate limiting.",
+      "selection_reason": "Primary programmatic source for high-confidence wild-type and mutant EGFR bioactivity data (IC50 records).",
+      "page_type": "api_query",
+      "expected_content": "JSON response containing structured bioactivity measurements and associated compound details.",
       "parser_plan": {
-        "tool": "requests + BeautifulSoup",
+        "tool": "requests",
         "selectors": {
-          "table": "table.binding-records",
-          "row": "tbody tr",
-          "sequence": "td.seq",
-          "target": "td.target",
-          "value": "td.kd",
-          "unit": "td.unit"
+          "records_path": "activities",
+          "compound_id": "molecule_chembl_id",
+          "compound_smiles": "canonical_smiles",
+          "standard_type": "standard_type",
+          "standard_value": "standard_value",
+          "standard_units": "standard_units",
+          "standard_relation": "standard_relation"
         }
       },
-      "raw_snapshot_path": "data/raw/web/aptagen_thrombin_entries.html",
+      "raw_snapshot_path": "data/raw/web/chembl_egfr_activities.json",
       "extraction_status": "template_pending"
     },
     {
-      "source_id": "db_aptagen",
-      "page_id": "aptagen_lysozyme_entries",
-      "url": "https://example.org/aptamer-db/target/lysozyme",
-      "access_date": "2026-02-02",
+      "source_id": "db_pubchem_api",
+      "page_id": "pubchem_egfr_assays",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/assay/target/protein/name/EGFR/JSON",
+      "access_date": "2026-05-28",
       "access_status": "open_access",
-      "robots_notes": "Same policy as thrombin browse page.",
-      "selection_reason": "Complements PDF sources for lysozyme aptamer records.",
-      "page_type": "database_browse_page",
-      "expected_content": "Paginated result list with affinity fields",
+      "robots_notes": "PubChem PUG REST API allows automated querying; request frequency must not exceed 5 requests per second.",
+      "selection_reason": "Supplementary source providing a high volume of EGFR screening assay records to extend coverage.",
+      "page_type": "api_query",
+      "expected_content": "JSON payload containing assay descriptions, CID, and outcome/activity values for EGFR targets.",
       "parser_plan": {
-        "tool": "requests + BeautifulSoup",
+        "tool": "requests",
         "selectors": {
-          "table": "table.binding-records",
-          "row": "tbody tr",
-          "sequence": "td.seq",
-          "target": "td.target",
-          "value": "td.kd",
-          "unit": "td.unit"
+          "records_path": "PC_AssayContainer",
+          "compound_id": "cid",
+          "standard_type": "activity_outcome",
+          "standard_value": "value",
+          "standard_units": "unit"
         }
       },
-      "raw_snapshot_path": "data/raw/web/aptagen_lysozyme_entries.html",
+      "raw_snapshot_path": "data/raw/web/pubchem_egfr_assays.json",
+      "extraction_status": "template_pending"
+    },
+    {
+      "source_id": "db_bindingdb",
+      "page_id": "bindingdb_egfr_target_results",
+      "url": "https://www.bindingdb.org/rest/getLigandsByUniprots?uniprot=P00533&cutoff=100000",
+      "access_date": "2026-05-28",
+      "access_status": "open_access",
+      "robots_notes": "Programmatic REST API queries are permitted; respect server load by keeping request frequency reasonable.",
+      "selection_reason": "Valuable repository for thermodynamic values (Ki, Kd) of EGFR inhibitors to complement IC50 measurements.",
+      "page_type": "api_query",
+      "expected_content": "JSON payload containing ligand structures, affinity values (Ki, Kd, IC50), and target designations for UniProt entry P00533.",
+      "parser_plan": {
+        "tool": "requests (JSON)",
+        "selectors": {
+          "records_path": "getLindsByUniprotsResponse.affinities",
+          "compound_id": "monomerid",
+          "compound_smiles": "smile",
+          "egfr_variant": "target",
+          "standard_type": "affinity_type",
+          "standard_value": "affinity",
+          "standard_units": "nM"
+        }
+      },
+      "raw_snapshot_path": "data/raw/web/bindingdb_egfr_raw.json",
+      "extraction_status": "template_pending"
+    },
+    {
+      "source_id": "gn_gnn_zenodo",
+      "page_id": "zenodo_egfr_gnn_csv",
+      "url": "https://zenodo.org/records/11122146",
+      "access_date": "2026-05-28",
+      "access_status": "open_access",
+      "robots_notes": "Zenodo is an open-access repository that supports direct downloading of files via unique record URLs.",
+      "selection_reason": "Large-scale external validation benchmark containing annotated records across 11 EGFR mutations.",
+      "page_type": "file_download",
+      "expected_content": "Comma-separated values (CSV) table with annotated compound records, mutations, and activities.",
+      "parser_plan": {
+        "tool": "pandas",
+        "selectors": {
+          "delimiter": ",",
+          "compound_id": "compound_id",
+          "compound_smiles": "SMILES_NS",
+          "egfr_variant": "mutational_status",
+          "pchembl_value": "pIC50"
+        }
+      },
+      "raw_snapshot_path": "data/raw/web/zenodo_egfr_gnn_dataset.csv",
       "extraction_status": "template_pending"
     }
   ]
