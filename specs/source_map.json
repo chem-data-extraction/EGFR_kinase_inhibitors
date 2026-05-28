@@ -60,25 +60,6 @@
           "recommended_method": "Tabula or pdfplumber table extraction"
         },
         "notes": "Ultra-recent 2026 paper analyzing BI-8128 and BI-4732 binding modes to T790M/C797S mutant with resolved PDB structures."
-      },
-      {
-        "source_id": "paper_srour_2025",
-        "name": "Srour et al. 2025 – New benzimidazole-triazole glycoconjugates as anti-cancer agents and EGFR inhibitors",
-        "source_type": "journal_article",
-        "url": "https://www.nature.com/articles/s41598-025-96675-3",
-        "doi": "10.1038/s41598-025-96675-3",
-        "access_status": "open_access",
-        "access_method": "publisher PDF download",
-        "access_date": "2026-05-26",
-        "license": "CC BY-NC-ND 4.0",
-        "expected_data_volume": "medium",
-        "estimated_records": 78,
-        "available_data_types": ["tables", "figures", "text"],
-        "expected_fields": ["compound_name", "egfr_variant", "pdb_id", "standard_type", "standard_value", "standard_units", "assay_type"],
-        "extraction_strategy": {
-          "recommended_method": "regex parsing of text and pdfplumber table extraction"
-        },
-        "notes": "Extremely recent 2025 study on osimertinib derivatives targeting WT EGFR and 4 its mutant forms. Not yet fully curated in standard ChEMBL releases."
       }
     ],
     "supplementary_materials": [

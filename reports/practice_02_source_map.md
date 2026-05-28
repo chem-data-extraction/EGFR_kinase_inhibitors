@@ -7,7 +7,7 @@ Our search strategy relied on a broad initial literature query followed by a tar
 2. **Technical Selection Criteria:** From the search results, we manually selected four representative papers that satisfy specific parsing challenges:
    - *Lim et al. 2023:* Selected to practice image table parsing of structured 4th-generation C797S inhibitor assays.
    - *Men et al. 2025:* Selected to practice text extraction of baseline mutational inhibition values from very recent (2025) osimertinib conjugate assays not yet indexed in database releases.
-   - *Damghani et al. 2026* and *Srour et al. 2025*: Selected to practice extracting complex structural and kinetic values (IC50 and PDB co-crystal IDs) from the main text and tables.
+   - *Damghani et al. 2026*: Selected to practice extracting complex structural and kinetic values (IC50 and PDB co-crystal IDs) from the main text and tables.
 3. **Database & External Benchmark Reference:** In parallel, we mapped structured databases (ChEMBL, PubChem and BindingDB) using the target UniProt ID `P00533` to serve as a high-volume reference, and integrated pre-existing compiled dataset from Zenodo and.
 
 ## Source groups
@@ -28,7 +28,7 @@ Sources are categorized and ranked below by their structural role in the project
     These structured databases are prioritized first. They provide the large statistical backbone of historical, curated wild-type and mutant EGFR records with standardized chemical identifiers. Gathering these records forms the core training set for the molecular representation pipeline.
 
 ### 2. Scientific Papers: Capturing Recent Research [Priority: High/Medium]
-*   **Lim et al. 2023 (`paper_lim_2023`), Men et al. 2025 (`paper_men_2025` & `supp_men_2025`), Srour et al. 2025 (`paper_srour_2025`), Damghani et al. 2026 (`paper_damghani_2026`):**
+*   **Lim et al. 2023 (`paper_lim_2023`), Men et al. 2025 (`paper_men_2025` & `supp_men_2025`), Damghani et al. 2026 (`paper_damghani_2026`):**
     These primary papers and their supplements are prioritized next. They are used to extract modern compounds. Because these ultra-recent assays (2023–2026) are not yet fully indexed in database releases due to standard curation lag, manual or semi-automated PDF parsing is required to keep our dataset up-to-date.
 
 ### 3. Pre-compiled Datasets: Pipeline Validation and Comparison [Priority: Low]
@@ -50,7 +50,7 @@ Sources are categorized and ranked below by their structural role in the project
 
 Our extraction workflow is structured to parse the following formats:
 - **Inline PDF Text:** Unstructured sentences in the article body (e.g., in `paper_damghani_2026` where specific IC50 values are written in text paragraphs).
-- **PDF Tables:** Image or vector_based grid tables within the figures (such as Table 1 in `paper_srour_2025`).
+- **PDF Tables:** Image or vector_based grid tables within the figures (such as Table 1 in `paper_men_2025`).
 - **Supplemental PDFs:** Structured tables and figures containing additional screening data (e.g., Table S2 in `supp_men_2025`).
 - **REST API JSON:** Nested structured objects returned by EBI and NCBI endpoints.
 - **Tabular Text Files:** Flat TSV and CSV structures downloaded from BindingDB and Zenodo repository.
@@ -75,6 +75,6 @@ We mapped external pre-compiled dataset: the **Zenodo GraphEGFR dataset (`gh_zen
 3. **Manual Literature Extractions (2023, 2025, 2026):** These ultra-recent publications will be used to **enrich and update our core dataset** with cutting-edge chemical space (such as BI-8128 structures or osimertinib conjugates), directly filling the curation lag of standard databases.
 
 ### Standard Gaps
-1. **Curation Lags for Recent Resistance Mutations:** Databases like ChEMBL have a time lag before curating very recent papers on emerging mutations. We address this by extracting these data points directly from primary papers (`paper_lim_2023`, `paper_men_2025`, `paper_srour_2025`, `paper_damghani_2026`).
+1. **Curation Lags for Recent Resistance Mutations:** Databases like ChEMBL have a time lag before curating very recent papers on emerging mutations. We address this by extracting these data points directly from primary papers (`paper_lim_2023`, `paper_men_2025`, `paper_damghani_2026`).
 2. **Incomplete Assay Metadata:** Curated databases often omit the specific ATP concentration used in kinase assays, making it difficult to convert IC50s to comparable $K_i$ values. We handle this by making `atp_concentration_uM` an optional field and documenting cases where it is unavailable.
 3. **Proprietary Pharmaceutical Data:** A significant volume of SAR profiling data is kept in private corporate databases and is not published. Our dataset is therefore limited to academic and patent records that have been made public.
