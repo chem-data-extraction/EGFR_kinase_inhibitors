@@ -36,6 +36,7 @@ logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "specs/pdf_extraction_manifest.json"
+SCHEMA_PATH = ROOT / "specs/dataset_schema.json"
 LOG_PATH = ROOT / "data/extracted/extraction_log.jsonl"
 
 
@@ -624,16 +625,14 @@ async def run_pipeline() -> None:
     if all_records:
         df = pd.DataFrame(all_records)
         
-        expected_schema_columns = [
-            "compound_name", "egfr_variant", "assay_type", "cell_line", 
-            "standard_type", "standard_relation", "standard_value", 
-            "standard_units", "source_id", "table_origin"
-        ]
-        for col in expected_schema_columns:
-            if col not in df.columns:
-                df[col] = None
+        with SCHEMA_PATH.open(encoding="utf-8") as f:
+            schema = json.load(f)
+        schema_cols = [field["name"] for field in schema["fields"]]    
                 
-        df = df[expected_schema_columns]
+        extra_cols = [c for c in df.columns if c not in schema_cols]
+        final_cols = schema_cols + extra_cols
+        df = df[final_cols]
+        
         df.to_csv(output_records_path, index=False, encoding="utf-8")
         
         print(f"\nExtraction complete! Consolidated records: {len(df)}")

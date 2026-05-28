@@ -19,6 +19,7 @@ import requests
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "specs/web_extraction_manifest.json"
+SCHEMA_PATH = ROOT / "specs/dataset_schema.json"
 LOG_PATH = ROOT / "data/extracted/extraction_log.jsonl"
 
 
@@ -85,14 +86,15 @@ def extract_chembl_records(data: dict, source_id: str) -> list[dict]:
             "record_id": f"chembl_{act_id}",
             "compound_id": act.get("molecule_chembl_id"),
             "compound_smiles": act.get("canonical_smiles"),
-            "egfr_variant": act.get("assay_description"),
+            "compound_name": act.get("molecule_pref_name"),
             "standard_type": act.get("standard_type"),
             "standard_value": act.get("standard_value"),
             "standard_units": act.get("standard_units"),
-            "standard_relation": act.get("standard_relation"),
+            "standard_relation": act.get("standard_relation") or act.get("relation") or "=",
             "source_id": source_id,
             "extraction_confidence": "high",
-            "extraction_method": "web_scrape"
+            "extraction_method": "web_scrape",
+            "notes": act.get("assay_description")
         })
     return records
 
@@ -130,7 +132,7 @@ def process_pubchem(page: dict, raw_path: Path) -> dict:
     
     smiles_map = {}
     chunk_size = 1000
-    smiles_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/property/SMILES/json"
+    smiles_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/property/SMILES,IUPACName/json"
 
     for i in range(0, len(unique_cids), chunk_size):
         chunk = unique_cids[i:i+chunk_size]
@@ -174,6 +176,7 @@ def extract_pubchem_records(data: dict, source_id: str) -> list[dict]:
     type_idx = col_map.get("Activity Name", -1)
     name_idx = col_map.get("Assay Name", -1)
     unit_idx = col_map.get("Activity Unit", -1)
+    db_assay_type_idx = col_map.get("Assay Type", -1)
 
     for idx, r in enumerate(rows):
         cells = r.get("Cell", [])
@@ -184,23 +187,34 @@ def extract_pubchem_records(data: dict, source_id: str) -> list[dict]:
         val = cells[val_idx] if val_idx != -1 and val_idx < len(cells) else None
         act_type = cells[type_idx] if type_idx != -1 and type_idx < len(cells) else None
         assay_name = cells[name_idx] if name_idx != -1 and name_idx < len(cells) else None
+        db_assay_type = cells[db_assay_type_idx] if db_assay_type_idx != -1 and db_assay_type_idx < len(cells) else ""
         unit = cells[unit_idx] if unit_idx != -1 and unit_idx < len(cells) else "uM"
 
         if not cid or not val:
             continue
 
-        smiles = smiles_map.get(str(cid))
+        smiles_entry = smiles_map.get(str(cid))
+        if isinstance(smiles_entry, dict):
+            smiles = smiles_entry.get("smiles")
+            compound_name = smiles_entry.get("iupac_name")
+        else:
+            smiles = smiles_entry
+            compound_name = None
+
+        assay_name_str = str(assay_name) if assay_name else ""
+        
         records.append({
             "record_id": f"pubchem_{cid}_{idx}",
             "compound_id": str(cid),
             "compound_smiles": smiles,
-            "egfr_variant": assay_name,
+            "compound_name": compound_name,
             "standard_type": act_type,
             "standard_value": val,
             "standard_units": unit,
             "source_id": source_id,
             "extraction_confidence": "high",
-            "extraction_method": "web_scrape"
+            "extraction_method": "web_scrape",
+            "notes": assay_name_str
         })
     return records
 
@@ -243,13 +257,14 @@ def extract_bindingdb_records(data: dict, source_id: str) -> list[dict]:
             "record_id": f"bindingdb_{monomer_id}_{idx}",
             "compound_id": str(monomer_id),
             "compound_smiles": aff.get("smile"),
-            "egfr_variant": aff.get("target"),
+            "compound_name": aff.get("inhibitor") or aff.get("monomer_name") or aff.get("name"),
             "standard_type": aff.get("affinity_type"),
             "standard_value": aff.get("affinity"),
             "standard_units": "nM",
             "source_id": source_id,
             "extraction_confidence": "high",
-            "extraction_method": "web_scrape"
+            "extraction_method": "web_scrape",
+            "notes": aff.get("target")
         })
     return records
 
@@ -320,12 +335,12 @@ def extract_zenodo_records(data_folder_str: str, source_id: str) -> list[dict]:
 
             records.append({
                 "record_id": f"zenodo_{mutation}_{idx}",
-                "compound_id": f"zenodo_{mutation}_{idx}",
                 "compound_smiles": smiles,
                 "egfr_variant": mutation,
                 "standard_type": "IC50",
                 "standard_value": ic50_nm,
                 "standard_units": "nM",
+                "pchembl_value": pic50,
                 "source_id": source_id,
                 "extraction_confidence": "high",
                 "extraction_method": "web_scrape"
@@ -357,25 +372,28 @@ def main() -> None:
             if page_id == "chembl_egfr_activities":
                 raw_data = process_chembl(page, raw_path)
                 records = extract_chembl_records(raw_data, source_id)
+                all_records.extend(records)
                 
             elif page_id == "pubchem_egfr_assays":
                 raw_data = process_pubchem(page, raw_path)
                 records = extract_pubchem_records(raw_data, source_id)
+                all_records.extend(records)
                 
             elif page_id == "bindingdb_egfr_target_results":
                 raw_data = process_bindingdb(page, raw_path)
                 records = extract_bindingdb_records(raw_data, source_id)
+                all_records.extend(records)
                 
             elif page_id == "zenodo_egfr_gnn_csv":
                 data_folder_str = process_zenodo(page, raw_path)
                 records = extract_zenodo_records(data_folder_str, source_id)
+                zenodo_records = records
                 
             else:
                 print(f"    X Unknown page_id in manifest: {page_id}")
                 continue
 
             print(f"    -> Extracted records: {len(records)}")
-            all_records.extend(records)
 
             append_log({
                 "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
@@ -405,21 +423,31 @@ def main() -> None:
         
         df_output = pd.DataFrame(all_records)
         
-        schema_cols = [
-            "record_id", "compound_id", "compound_smiles", "egfr_variant",
-            "standard_type", "standard_value", "standard_units", "source_id"
-        ]
+        with SCHEMA_PATH.open(encoding="utf-8") as f:
+            schema = json.load(f)
+        schema_cols = [field["name"] for field in schema["fields"]]
+        
         for col in schema_cols:
             if col not in df_output.columns:
                 df_output[col] = None
                 
-        final_cols = schema_cols + [c for c in df_output.columns if c not in schema_cols]
+        extra_cols = [c for c in df_output.columns if c not in schema_cols]
+        final_cols = schema_cols + extra_cols
         df_output = df_output[final_cols]
         
-        df_output.to_csv(output_csv, index=False)
+        df_output.to_csv(output_csv, index=False, encoding="utf-8")
+        
         print(f"\n✓ Successfully saved {len(df_output)} records to file: {output_csv.relative_to(ROOT)}")
     else:
-        print("\nNo records were extracted.")
+        logger.error("\nNo records were extracted.")
+
+    if zenodo_records:
+        zenodo_csv = ROOT / "data/extracted/zenodo_extracted_records.csv"
+        df_zenodo = pd.DataFrame(zenodo_records)
+        df_zenodo.to_csv(zenodo_csv, index=False)
+        print(f"\n✓ Saved {len(df_zenodo)} Zenodo-specific records to: {zenodo_csv.relative_to(ROOT)}")
+    else:
+        print("\nNo Zenodo records were extracted.")
 
 
 if __name__ == "__main__":
