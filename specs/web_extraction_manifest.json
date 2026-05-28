@@ -26,7 +26,7 @@
         }
       },
       "raw_snapshot_path": "data/raw/web/chembl_egfr_activities.json",
-      "extraction_status": "template_pending"
+      "extraction_status": "completed"
     },
     {
       "source_id": "db_pubchem_api",
@@ -49,7 +49,7 @@
         }
       },
       "raw_snapshot_path": "data/raw/web/pubchem_egfr_assays.json",
-      "extraction_status": "template_pending"
+      "extraction_status": "completed"
     },
     {
       "source_id": "db_bindingdb",
@@ -74,7 +74,7 @@
         }
       },
       "raw_snapshot_path": "data/raw/web/bindingdb_egfr_raw.json",
-      "extraction_status": "template_pending"
+      "extraction_status": "completed"
     },
     {
       "source_id": "gn_gnn_zenodo",
@@ -97,7 +97,7 @@
         }
       },
       "raw_snapshot_path": "data/raw/web/zenodo_egfr_gnn_dataset.csv",
-      "extraction_status": "template_pending"
+      "extraction_status": "completed"
     }
   ]
 }

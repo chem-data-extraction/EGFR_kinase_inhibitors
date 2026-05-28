@@ -1,5 +1,5 @@
 {
-  "pdf_extraction_process": "Extract aptamer–protein binding records from selected PDF sources listed below.",
+  "pdf_extraction_process": "Extract EGFR inhibitors activity records from selected PDF sources listed below.",
   "output_records_file": "data/extracted/pdf_extracted_records.csv",
   "input_sources": [
     {
@@ -12,7 +12,7 @@
       "pages_used": [5, 6, 7],
       "expected_content": "Tables from Figures 2-4 with EGFR variants, binding affinities, and assay conditions.",
       "extraction_methods": ["llamaparse_table", "manual_verification"],
-      "extraction_status": "template_pending"
+      "extraction_status": "pending"
     },
     {
       "source_id": "paper_men_2025",
@@ -24,7 +24,7 @@
       "pages_used": [4],
       "expected_content": "Tables 1-2 with EGFR variants, binding affinities, and assay conditions.",
       "extraction_methods": ["pdfplumber_tables", "manual_verification"],
-      "extraction_status": "template_pending"
+      "extraction_status": "pending"
     },
     {
       "source_id": "supp_men_2025",
@@ -36,7 +36,7 @@
       "pages_used": [1, 2, 3, 4],
       "expected_content": "Tables with EGFR variants, binding affinities, and assay conditions.",
       "extraction_methods": ["pdfplumber_tables", "manual_verification"],
-      "extraction_status": "template_pending"
+      "extraction_status": "pending"
     },
     {
       "source_id": "paper_damghani_2026",
@@ -48,7 +48,7 @@
       "pages_used": [16, 17],
       "expected_content": "Tables with EGFR variants, binding affinities, and assay conditions.",
       "extraction_methods": ["pdfplumber_tables", "manual_verification"],
-      "extraction_status": "template_pending"
+      "extraction_status": "pending"
     }
   ]
 }
