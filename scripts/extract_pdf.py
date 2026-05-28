@@ -106,6 +106,7 @@ def normalize_target(target_name: str) -> str:
 async def extract_lim_2023(
     pdf_path: str,
     parsed_md_path: str,
+    pages_used: List[int],
     api_key: Optional[str] = None
 ) -> List[Dict[str, Any]]:
     records = []
@@ -129,7 +130,7 @@ async def extract_lim_2023(
             logger.error(f"Source PDF for Lim 2023 not found at: {pdf_path}")
             return []
             
-        trimmed_pdf_path = pdf_path.replace(".pdf", "_trimmed.pdf")
+        trimmed_pdf_path = pdf_path.with_name(pdf_path.stem + "_trimmed.pdf")
         logger.info(f"Trimming first 8 pages of Lim 2023 to: {trimmed_pdf_path}")
         try:
             reader = pypdf.PdfReader(pdf_path)
@@ -269,7 +270,7 @@ async def extract_lim_2023(
     return records
 
 
-def extract_damghani_2026(pdf_path: str) -> List[Dict[str, Any]]:
+def extract_damghani_2026(pdf_path: str, pages_used: List[int]) -> List[Dict[str, Any]]:
     records = []
     if not os.path.exists(pdf_path):
         logger.error(f"Source PDF for Damghani 2026 not found at: {pdf_path}")
@@ -352,7 +353,11 @@ def extract_damghani_2026(pdf_path: str) -> List[Dict[str, Any]]:
     return records
 
 
-def extract_men_2025(pdf_path: str, supp_pdf_path: Optional[str] = None) -> List[Dict[str, Any]]:
+def extract_men_2025(
+    pdf_path: str, 
+    pages_used: List[int], 
+    supp_pdf_path: Optional[str] = None
+) -> List[Dict[str, Any]]:
     records = []
     if not os.path.exists(pdf_path):
         logger.error(f"Source PDF for Men 2025 not found at: {pdf_path}")
@@ -520,7 +525,6 @@ def extract_men_2025(pdf_path: str, supp_pdf_path: Optional[str] = None) -> List
 
 
 async def run_pipeline() -> None:
-        # Загружаем конфигурацию из манифеста
     if not MANIFEST.exists():
         logger.error(f"Manifest not found at {MANIFEST}")
         return
@@ -530,7 +534,6 @@ async def run_pipeline() -> None:
 
     print(manifest.get("pdf_extraction_process", "PDF extraction"))
     
-    # Получаем итоговый путь к файлу выгрузки
     output_records_rel = manifest.get("output_records_file", "data/extracted/pdf_extracted_records.csv")
     output_records_path = ROOT / output_records_rel
     output_records_path.parent.mkdir(parents=True, exist_ok=True)
@@ -540,7 +543,6 @@ async def run_pipeline() -> None:
 
     all_records = []
 
-    # Читаем список источников напрямую из структуры манифеста
     for src in manifest.get("input_sources", []):
         pdf_id = src.get("pdf_id")
         pdf_path_rel = src.get("pdf_path")
@@ -564,23 +566,22 @@ async def run_pipeline() -> None:
             })
             continue
 
-        start_time = datetime.now(timezone.utc)
         extracted_subset = []
 
         try:
-            if pdf_id == "lim_2023":
-                parsed_md_path = output_records_path.parent / "parsed_lim_2023.md"
+            if pdf_id == "paper_lim_2023":
+                parsed_md_path = pdf_path.parent / (pdf_path.stem + "_parsed.md")
                 extracted_subset = await extract_lim_2023(
                     pdf_path=pdf_path,
                     parsed_md_path=parsed_md_path,
                     pages_used=pages_used
                 )
-            elif pdf_id == "damghani_2026":
+            elif pdf_id == "paper_damghani_2026":
                 extracted_subset = extract_damghani_2026(
                     pdf_path=pdf_path,
                     pages_used=pages_used
                 )
-            elif pdf_id == "men_2025":
+            elif pdf_id == "paper_men_2025":
                 supp_pdf_path = pdf_path.parent / "supp_men_2025.pdf"
                 extracted_subset = extract_men_2025(
                     pdf_path=pdf_path,
@@ -595,6 +596,8 @@ async def run_pipeline() -> None:
             status = "success" if extracted_subset else "warning"
             issue = None if extracted_subset else "No records could be extracted from this PDF"
             
+            print(f"    ✓ Extracted {len(extracted_subset)} records from {pdf_id}")
+            
             append_log({
                 "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                 "step": "pdf_extraction",
@@ -603,12 +606,11 @@ async def run_pipeline() -> None:
                 "tool": "extract_pdf.py",
                 "output": str(output_records_rel),
                 "records_extracted": len(extracted_subset),
-                "duration_seconds": (datetime.now(timezone.utc) - start_time).total_seconds(),
                 "issue": issue
             })
             
         except Exception as e:
-            logger.error(f"Pipeline crashed on {pdf_id}: {e}")
+            logger.error(f"    ✗ Pipeline crashed on {pdf_id}: {e}")
             append_log({
                 "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                 "step": "pdf_extraction",
