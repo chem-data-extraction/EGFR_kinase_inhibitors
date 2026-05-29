@@ -78,9 +78,3 @@ Placeholder extraction (no PDF/HTML libraries required):
 python scripts/extract_pdf.py
 python scripts/extract_web.py
 ```
-
-## License and citation
-
-- Replace the placeholder in **`LICENSE`** before publication (e.g. CC-BY-4.0 or CC0-1.0, subject to upstream source licenses).
-- Fill in **`CITATION.cff`** with authors, version, and repository URL.
-- Summarize the dataset for users in **`dataset_card.md`**.
