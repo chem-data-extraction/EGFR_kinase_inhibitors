@@ -44,9 +44,7 @@ The dataset schema consists of both required fields (necessary for a valid entry
 
 ### Optional Fields
 9. `compound_name` (string): Generic or common name (e.g., `Erlotinib`, `Gefitinib`).
-10. `pdb_id` (string): Corresponding Protein Data Bank (PDB) ID if the co-crystal structure is resolved.
 11. `standard_relation` (string): Precision relation operator; must be one of `["=", "<", ">", "<=", ">="]`.
-12. `normalized_value_nm` (numeric): Measured activity converted to nanomolar (nM).
 13. `pchembl_value` (numeric): Standardized negative log10 of the molar activity value.
 14. `assay_type` (string): Context of the assay; must be one of `["Biochemical", "Cellular"]`.
 15. `cell_line` (string): Cell line name used for cellular assays (e.g., `Ba/F3`, `H1975`, `PC-9`).
