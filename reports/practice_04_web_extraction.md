@@ -65,6 +65,7 @@ Raw extracted fields from different web formats were mapped to the standardized 
 - `data/raw/web/chembl_egfr_activities.json` - Raw ChEMBL API response snapshot.
 - `data/raw/web/pubchem_egfr_assays.json` - Raw PubChem bioassay and SMILES response snapshot.
 - `data/raw/web/bindingdb_egfr_results.html` - Raw BindingDB response snapshot.
+- `data/raw/web/zenodo_egfr_gnn_dataset.csv` - **NOT DOWNLOADED** - The original Zenodo archive (2.9 GB) was not stored locally due to its large size. Only the selectively extracted mutation CSV files were retained in `data/raw/web/extracted_zenodo/`.
 - `data/raw/web/extracted_zenodo/...` - Folder containing selectively extracted mutation CSV files.
 - `data/extracted/zenodo_extracted_records.csv` - Unified flat table containing all extracted Zenodo records.
 - `data/extracted/extraction_log.jsonl` - General extraction log registering timestamps, statuses, and record counts.

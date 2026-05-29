@@ -73,7 +73,7 @@
           "standard_units": "nM"
         }
       },
-      "raw_snapshot_path": "data/raw/web/bindingdb_egfr_raw.json",
+      "raw_snapshot_path": "data/raw/web/bindingdb_egfr_results.html",
       "extraction_status": "completed"
     },
     {
