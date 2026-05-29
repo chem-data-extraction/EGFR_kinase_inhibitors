@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import pandas as pd
+from rdkit import Chem
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -102,23 +103,64 @@ def check_source_id(df: pd.DataFrame, source_map: dict) -> tuple[list[str], list
     if df["source_id"].isna().any() or (df["source_id"].astype(str).str.strip() == "").any():
         errors.append("source_id contains null or empty values")
 
-    unknown = set(df["source_id"].dropna().astype(str)) - valid_ids
+    row_ids = set()
+    for raw_id in df["source_id"].dropna().astype(str):
+        for single_id in raw_id.split(";"):
+            row_ids.add(single_id.strip())
+
+    unknown = row_ids - valid_ids
     if unknown:
-        warnings.append(f"source_id not in source map (warning): {sorted(unknown)}")
+        warnings.append(f"source_id not in specs/source_map.json (warning): {sorted(unknown)}")
     return errors, warnings
 
 
-def check_measurement_value(df: pd.DataFrame) -> list[str]:
+def check_standard_value(df: pd.DataFrame) -> list[str]:
     issues = []
-    col = df["measurement_value"]
+    if "standard_value" not in df.columns:
+        issues.append("Missing standard_value column")
+        return issues
+    col = df["standard_value"]
     for idx, val in col.items():
         if pd.isna(val) or val == "":
             continue
         try:
             float(val)
         except (TypeError, ValueError):
-            issues.append(f"measurement_value not numeric at row {idx}: {val!r}")
+            issues.append(f"standard_value not numeric at row {idx}: {val!r}")
     return issues
+
+
+def check_pchembl_value(df: pd.DataFrame) -> list[str]:
+    warnings = []
+    if "pchembl_value" not in df.columns:
+        return warnings
+    col = df["pchembl_value"]
+    for idx, val in col.items():
+        if pd.isna(val) or val == "":
+            continue
+        try:
+            float(val)
+        except (TypeError, ValueError):
+            warnings.append(f"pchembl_value is not numeric at row {idx}: {val!r}")
+    return warnings
+
+
+def check_smiles_validity(df: pd.DataFrame) -> list[str]:
+    errors = []
+    if "compound_smiles" not in df.columns:
+        errors.append("Missing compound_smiles column")
+        return errors
+    for idx, val in df["compound_smiles"].items():
+        if pd.isna(val) or str(val).strip() == "":
+            errors.append(f"Empty compound_smiles at row {idx}")
+            continue
+        try:
+            mol = Chem.MolFromSmiles(str(val))
+            if mol is None:
+                errors.append(f"RDKit failed to parse SMILES at row {idx}: {val}")
+        except Exception as e:
+            errors.append(f"RDKit parser error at row {idx} for SMILES {val}: {e}")
+    return errors
 
 
 def check_extraction_confidence(df: pd.DataFrame) -> list[str]:
@@ -142,6 +184,7 @@ def validate(root: Path = ROOT) -> tuple[list[str], list[str]]:
 
     dataset_path = root / "data/processed/dataset.csv"
     if not dataset_path.is_file():
+        errors.append("data/processed/dataset.csv is missing. Skipping data-level validation.")
         return errors, warnings
 
     schema = load_json(root / "specs/dataset_schema.json")
@@ -150,11 +193,13 @@ def validate(root: Path = ROOT) -> tuple[list[str], list[str]]:
 
     errors.extend(check_dataset_columns(df, schema))
     errors.extend(check_record_id(df))
-    errors.extend(check_measurement_value(df))
+    errors.extend(check_standard_value(df))
+    errors.extend(check_smiles_validity(df))
 
     src_errors, src_warnings = check_source_id(df, source_map)
     errors.extend(src_errors)
     warnings.extend(src_warnings)
+    warnings.extend(check_pchembl_value(df))
     warnings.extend(check_extraction_confidence(df))
 
     return errors, warnings

@@ -34,14 +34,14 @@
       "target": "source_id",
       "rule_type": "not_null",
       "severity": "error",
-      "description": "Every row must reference a source_id."
+      "description": "Every row must reference at least one source_id."
     },
     {
       "rule_id": "source_id_in_source_map",
       "target": "source_id",
       "rule_type": "foreign_key",
       "severity": "warning",
-      "description": "source_id should appear in specs/source_map.json."
+      "description": "All referenced source_id should appear in specs/source_map.json."
     },
     {
       "rule_id": "columns_match_schema",
@@ -51,11 +51,25 @@
       "description": "Dataset columns must match field names in specs/dataset_schema.json."
     },
     {
-      "rule_id": "measurement_value_numeric",
-      "target": "measurement_value",
+      "rule_id": "standard_value_numeric",
+      "target": "standard_value",
       "rule_type": "numeric_or_null",
       "severity": "error",
-      "description": "measurement_value must be numeric or empty/null."
+      "description": "standard_value must be numeric or empty/null."
+    },
+    {
+      "rule_id": "pchembl_value_numeric",
+      "target": "pchembl_value",
+      "rule_type": "numeric_or_null",
+      "severity": "warning",
+      "description": "pchembl_value must be numeric or empty/null."
+    },
+    {
+      "rule_id": "compound_smiles_validity",
+      "target": "compound_smiles",
+      "rule_type": "smiles_validity",
+      "severity": "error",
+      "description": "compound_smiles must be a valid SMILES string and parseable by RDKit."
     },
     {
       "rule_id": "extraction_confidence_allowed",
