@@ -55,6 +55,14 @@ raw (PDF / web / external)
 - `dataset_card.md`, `LICENSE`, `CITATION.cff`
 - Passing validation and tests
 
+## Environment variables
+
+For extraction with Llama Cloud, set the API key:
+
+```bash
+export LLAMA_CLOUD_API_KEY="your-api-key-here"
+```
+
 ## How to run validation
 
 ```bash
