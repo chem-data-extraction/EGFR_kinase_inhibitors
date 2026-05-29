@@ -62,7 +62,7 @@
       "page_type": "api_query",
       "expected_content": "JSON payload containing ligand structures, affinity values (Ki, Kd, IC50), and target designations for UniProt entry P00533.",
       "parser_plan": {
-        "tool": "requests (JSON)",
+        "tool": "requests",
         "selectors": {
           "records_path": "getLindsByUniprotsResponse.affinities",
           "compound_id": "monomerid",
