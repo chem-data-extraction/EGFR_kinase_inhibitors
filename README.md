@@ -37,8 +37,6 @@ Develop the repository in five steps (see `reports/`):
 4. **Web extraction** — `specs/web_extraction_manifest.json`, `scripts/extract_web.py`, Practice 4 report  
 5. **Cleaning, normalization and publication** — `specs/cleaning_pipeline.json`, cleaning scripts, Practice 5 report  
 
-Complete **`reports/final_report.md`** and **`dataset_card.md`** before submission.
-
 ## Data pipeline
 
 ```text

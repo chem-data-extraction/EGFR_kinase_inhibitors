@@ -1,7 +1,5 @@
 # Raw data
 
-Store **unaltered** source files here. Do not edit files in this folder after download; add new versions with clear names instead.
-
 ## What belongs here
 
 | Subfolder | Contents |
