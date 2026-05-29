@@ -40,9 +40,9 @@ Rules cpecified in `specs/validation_rules.json`; checks via `scripts/validate_p
 
 ## Known limitations
 
-- Example DOIs and URLs are placeholders.
-- Template rows are not verified against live sources.
-- Some sources may be paywalled or not redistributable—confirm LICENSE before publication.
+- Dataset focuses on EGFR kinase inhibitors with experimental bioactivity measurements.
+- Some mutation annotations rely on text parsing and may require manual verification.
+- Activity values from different sources may use varying assay conditions—consider context when comparing.
 
 ## Recommended use
 

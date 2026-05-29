@@ -75,7 +75,7 @@ All required files exist, all JSON configurations parse without errors, column c
 
 - [x] `dataset.csv` matches `specs/dataset_schema.json`
 - [x] All `source_id` values documented in source map
-- [x] LICENSE replaced (not placeholder)
+- [x] LICENSE replaced
 - [x] `CITATION.cff` completed
 - [x] `dataset_card.md` updated
 - [x] `reports/final_report.md` complete
