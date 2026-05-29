@@ -49,6 +49,7 @@ Raw extracted fields from different web formats were mapped to the standardized 
 | **standard_value** | `standard_value` | `Activity Value [uM]` | `affinity` | Calculated as: $10^{9 - pIC50}$ |
 | **standard_units** | `standard_units` | `Activity Unit` | Fixed to `"nM"` | Fixed to `"nM"` |
 | **source_id** | `db_chembl_api` | `db_pubchem_api` | `db_bindingdb` | `gn_gnn_zenodo` |
+| **notes** | `assay_description` | `Assay Name` | `target` | Missed |
 
 ## Extraction problems
 
@@ -63,7 +64,7 @@ Raw extracted fields from different web formats were mapped to the standardized 
 - `data/extracted/web_extracted_records.csv` - Unified flat table containing all extracted raw web records.
 - `data/raw/web/chembl_egfr_activities.json` - Raw ChEMBL API response snapshot.
 - `data/raw/web/pubchem_egfr_assays.json` - Raw PubChem bioassay and SMILES response snapshot.
-- `data/raw/web/bindingdb_egfr_raw.json` - Raw BindingDB response snapshot.
-- `data/raw/web/GraphEGFR.tar.gz` - Raw GNN dataset archive from Zenodo.
+- `data/raw/web/bindingdb_egfr_results.html` - Raw BindingDB response snapshot.
 - `data/raw/web/extracted_zenodo/...` - Folder containing selectively extracted mutation CSV files.
+- `data/extracted/zenodo_extracted_records.csv` - Unified flat table containing all extracted Zenodo records.
 - `data/extracted/extraction_log.jsonl` - General extraction log registering timestamps, statuses, and record counts.

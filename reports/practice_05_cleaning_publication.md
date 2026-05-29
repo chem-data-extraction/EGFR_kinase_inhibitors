@@ -30,7 +30,7 @@ The cleaning process was executed step-by-step according to the defined `specs/c
 * **`10^-5 mol/L`**: Multiplied by $10\ 000.0$.
 * **`10^-2M`**: Multiplied by $10\ 000\ 000.0$.
 * **`ug.mL-1`** (Mass concentration): Converted to molar concentration via molecular weight (MW) calculated directly from the molecule's SMILES string using RDKit:
-  $$\text{Value in nM} = \left(\frac{\text{Value in } \mu\text{g/mL}}{\text{MW in g/mol}}\right) \times 1\ 000\ 000.0$$
+$$\text{Value in nM} = \left(\frac{\text{Value in } \mu\text{g/mL}}{\text{MW in g/mol}}\right) \times 1\ 000\ 000.0$$
 
 ### 2. Missing-Value Tokens
 Any text strings matching `{"", "na", "n/a", "none", "null", "-", "nan", "unknown"}` (case-insensitive) were mapped to proper Python `None` / `np.nan` values.
