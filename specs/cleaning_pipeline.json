@@ -9,7 +9,7 @@
     {
       "step_id": "merge_sources",
       "operation": "concatenate",
-      "description": "Combine PDF- and web-extracted CSV files into a single interim table.",
+      "description": "Combine raw PDF- and web-scraped CSV records, aligning IDs and mapping EGFR variant formats into a single raw interim table.",
       "input_files": [
         "data/extracted/pdf_extracted_records.csv",
         "data/extracted/web_extracted_records.csv"
@@ -17,46 +17,60 @@
       "output_file": "data/interim/merged_records.csv"
     },
     {
-      "step_id": "normalize_units",
+      "step_id": "resolve_pdf_structures",
+      "operation": "iupac_to_smiles",
+      "description": "Convert paper compound short-codes (e.g., 9a, 10b) from PDF extraction to valid chemical SMILES via the OPSIN API.",
+      "fields": ["compound_name", "compound_smiles"],
+      "output_file": "data/interim/merged_records.csv"
+    },
+    {
+      "step_id": "primary_garbage_collection",
+      "operation": "null_filter",
+      "description": "Remove invalid rows missing critical biological measurements (value, type, or units) or lacking both compound name and SMILES representation.",
+      "fields": ["standard_value", "standard_type", "standard_units", "compound_name", "compound_smiles"],
+      "output_file": "data/interim/merged_records.csv"
+    },
+    {
+      "step_id": "normalize_activity_and_units",
       "operation": "unit_conversion",
-      "description": "Convert measurement_value to nanomolar (normalized_value_nm) using measurement_unit.",
-      "fields": ["measurement_value", "measurement_unit"],
+      "description": "Convert all biological concentration units (uM, M, ug.mL-1, etc.) to nanomolar (nM), utilizing molecular weights calculated via RDKit for mass concentrations, and normalize mathematical relations.",
+      "fields": ["standard_value", "standard_units", "standard_relation"],
       "output_file": "data/interim/merged_records.csv"
     },
     {
-      "step_id": "standardize_sequences",
-      "operation": "sequence_cleanup",
-      "description": "Uppercase aptamer sequences and remove whitespace or invalid characters.",
-      "fields": ["aptamer_sequence"],
+      "step_id": "extract_assay_parameters",
+      "operation": "parameter_extraction",
+      "description": "Extract EGFR target mutations, assay types, cell lines, ATP concentrations, and covalent mechanism flags from free-text notes using regex parsing and RDKit SMARTS acrylamide substructure matches.",
+      "fields": ["notes", "egfr_variant", "assay_type", "cell_line", "atp_concentration_uM", "covalent_flag"],
       "output_file": "data/interim/merged_records.csv"
     },
     {
-      "step_id": "standardize_missing_values",
-      "operation": "missing_value_cleanup",
-      "description": "Map NA, N/A, -, empty strings to null-like values for pandas export.",
-      "fields": ["measurement_value", "buffer", "notes"],
+      "step_id": "canonicalize_chemical_structures",
+      "operation": "structure_standardization",
+      "description": "Standardize chemical structures: remove counter-ions and salts using RDKit's SaltRemover, compute canonical isomeric SMILES, and generate stable 2D InChIKeys.",
+      "fields": ["compound_smiles", "inchikey"],
       "output_file": "data/interim/merged_records.csv"
     },
     {
-      "step_id": "deduplicate_records",
+      "step_id": "calculate_pchembl_scales",
+      "operation": "logarithmic_scaling",
+      "description": "Compute logarithmic pChEMBL scales (-log10(Molar value)) from standardized nM concentration values to provide uniform distribution metrics.",
+      "fields": ["standard_value", "pchembl_value"],
+      "output_file": "data/interim/merged_records.csv"
+    },
+    {
+      "step_id": "consensus_deduplication",
       "operation": "deduplicate",
-      "description": "Remove duplicate rows sharing record_id or identical sequence+target+value+source.",
-      "fields": ["record_id", "aptamer_sequence", "target_name", "measurement_value", "source_id"],
-      "output_file": "data/interim/merged_records.csv"
+      "description": "Group identical compound-variant-assay pairs. Unify data using median pChEMBL values if lab-to-lab variance is within 1.0 log-unit, and exclude highly conflicting entries.",
+      "fields": ["inchikey", "egfr_variant", "assay_type", "pchembl_value"],
+      "output_file": "data/processed/dataset.csv"
     },
     {
-      "step_id": "validate_schema",
+      "step_id": "validate_schema_and_integrity",
       "operation": "validation",
-      "description": "Run rules in specs/validation_rules.json via scripts/validate_project.py.",
+      "description": "Run programmatic verification checks via scripts/validate_project.py to validate the processed dataset against specs/validation_rules.json and dataset_schema.json.",
       "input_files": ["data/processed/dataset.csv"],
       "output_file": "reports/practice_05_cleaning_publication.md"
-    },
-    {
-      "step_id": "export_final_dataset",
-      "operation": "export",
-      "description": "Write schema-aligned columns to the publication dataset CSV.",
-      "input_files": ["data/interim/merged_records.csv"],
-      "output_file": "data/processed/dataset.csv"
     }
   ]
 }
